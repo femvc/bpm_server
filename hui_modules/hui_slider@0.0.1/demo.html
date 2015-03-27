@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_slider</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_slider.js"></script>
+</head>
+<body>
+    <div ui="type:'Slider'" id="a"></div>
+
+<!--div ui="type:'Slider',id:'a',labels:'both',ticks:true,tickStep:4,minValue:25,maxValue:65,width:300,smallChange:1,rangeSelection:false"></div-->
+
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_slider'], function () {
+            // init 
+            var a = document.getElementById('a');
+            hui.Control.create(a);
+        });
+    </script>
+</body>
+</html>

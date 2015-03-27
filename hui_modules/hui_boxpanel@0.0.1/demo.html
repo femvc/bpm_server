@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_boxpanel</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_boxpanel.js"></script>
+</head>
+<body>
+    <button onclick="hui.Control.getById('aa').show()">show</button>
+    <div ui="type:'Boxpanel',id:'aa',size:{w:500,h:500}" id="a">This is a dialog.</div>
+
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_boxpanel'], function () {
+            // init 
+            hui.Control.create(document.getElementById('a'));
+        });
+    </script>
+</body>
+</html>

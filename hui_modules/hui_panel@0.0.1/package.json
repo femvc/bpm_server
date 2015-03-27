@@ -1,0 +1,11 @@
+{
+    "name": "hui_panel",
+    "version": "0.0.1",
+    "description": "This is \"hui_panel\".",
+    "main": "hui_panel.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_control": "*"
+    },
+    "author": "haiyang5210"
+}

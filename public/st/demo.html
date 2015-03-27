@@ -1,0 +1,19 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+<meta charset="UTF-8"> 
+<title>Demo - jquery</title> 
+<script src="http://bpmjs.org/api/combo??jquery"></script> 
+</head> 
+<body> 
+<div id="a">a</div> 
+
+<script type="text/javascript"> 
+    hui.define('', ['jquery'], function () { 
+        // init 
+        document.getElementById('a').innerHTML = 'jquery ok'; 
+        alert($('#a').innerHTML); 
+    }); 
+</script> 
+</body> 
+</html> 

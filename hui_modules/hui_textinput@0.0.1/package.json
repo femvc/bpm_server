@@ -1,0 +1,11 @@
+{
+    "name": "hui_textinput",
+    "version": "0.0.1",
+    "description": "This is \"hui_textinput\".",
+    "main": "hui_textinput.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_util": "*"
+    },
+    "author": "haiyang5210"
+}

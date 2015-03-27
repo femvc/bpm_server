@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_util</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_util.js"></script>
+</head>
+<body>
+    hui.util.formatDate(new Date()); <br/>
+    >> <span id="a"></span>
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_util'], function () {
+            // init 
+            hui.g('a').innerHTML = hui.util.formatDate(new Date());
+        });
+    </script>
+</body>
+</html>

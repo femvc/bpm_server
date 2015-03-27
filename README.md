@@ -1,2 +1,3 @@
 # bpm_server
-bpm server
+
+Browser Javascript package management server

@@ -1,0 +1,11 @@
+{
+    "name": "hui_mask",
+    "version": "0.0.1",
+    "description": "This is \"hui_mask\".",
+    "main": "hui_mask.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_util": "*"
+    },
+    "author": "haiyang5210"
+}

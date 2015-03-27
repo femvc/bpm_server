@@ -1,0 +1,13 @@
+{
+    "name": "hui_radiobox",
+    "version": "0.0.1",
+    "description": "This is \"hui_radiobox\".",
+    "main": "hui_radiobox.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_control": "*",
+        "hui_util": "*",
+        "hui_checkbox": "*"
+    },
+    "author": "haiyang5210"
+}

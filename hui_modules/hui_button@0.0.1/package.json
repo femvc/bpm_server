@@ -1,0 +1,12 @@
+{
+    "name": "hui_button",
+    "version": "0.0.1",
+    "description": "This is \"hui_button\".",
+    "main": "hui_button.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_control": "*",
+        "hui_util": "*"
+    },
+    "author": "haiyang5210"
+}

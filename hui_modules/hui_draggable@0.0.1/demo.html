@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_draggable</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_draggable.js"></script>
+</head>
+<body>
+    <button class="hui_slider_leftpoint">aaa</button>
+
+    <div onmouseover="dd.isMoving&&dd.appendTo(this)">aaa</div>
+    <div onmouseover="dd.isMoving&&dd.appendTo(this)">bbb</div>
+    <div onmouseover="dd.isMoving&&dd.appendTo(this)">ccc</div>
+    <div onmouseover="dd.isMoving&&dd.appendTo(this)">ddd</div>
+    <div onmouseover="dd.isMoving&&dd.appendTo(this)">bbb</div>
+    <div onmouseover="dd.isMoving&&dd.appendTo(this)">ccc</div>
+
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_draggable'], function () {
+            // init 
+            window.dd = hui.Draggable(hui.cc('hui_slider_leftpoint'), {
+                preventDefault: false,
+                move: function () {
+                    if (this.moving) {
+                        return;
+                    }
+                    this.moving = true;
+                    // me.elem
+                    // me.onmove();
+                    this.moving = false;
+                },
+                revert: true,
+                autoTop: false
+            });
+        });
+    </script>
+</body>
+</html>

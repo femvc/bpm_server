@@ -1,0 +1,12 @@
+{
+  "name": "hui_action",
+  "version": "0.0.1",
+  "description": "This is \"hui_action\".",
+  "main": "hui_action.js",
+  "dependencies": {
+    "hui": "*",
+    "hui_control": "*",
+    "hui_template": "*"
+  },
+  "author": "haiyang5210"
+}

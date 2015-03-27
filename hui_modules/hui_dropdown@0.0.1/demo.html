@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_dropdown</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_dropdown.js"></script>
+</head>
+<body>
+    <div id="a">
+         <div ui="type:'Dropdown',formName:'city',placeholder:'- 请选择 -',rule:'not_empty',
+ options:[{value:110000,text:'北京市'},{value:310000,text:'上海市'},{value:120000,text:'天津市'}],
+ size:{width:280}"></div>
+ <div ui="type:'Dropdown',formName:'mm',placeholder:'- 月 -',value:'',
+ optionStart:1,optionEnd:12,optionStep:1,
+ size:{width:86}"></div>
+
+    </div>
+
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_dropdown'], function () {
+            // init 
+            var a = document.getElementById('a');
+            hui.Control.init(a);
+        });
+    </script>
+</body>
+</html>

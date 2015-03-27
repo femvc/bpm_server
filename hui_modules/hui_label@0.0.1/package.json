@@ -1,0 +1,11 @@
+{
+    "name": "hui_label",
+    "version": "0.0.1",
+    "description": "This is \"hui_label\".",
+    "main": "hui_label.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_control": "*"
+    },
+    "author": "haiyang5210"
+}

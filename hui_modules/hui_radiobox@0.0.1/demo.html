@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_radiobox</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_radiobox.js"></script>
+</head>
+<body>
+    <div ui="type:'Radiobox',formName:'sex'" id="a">male</div>
+    <div ui="type:'Radiobox',formName:'sex'" id="b">female</div>
+    <span id="result"></span>
+
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_radiobox'], function () {
+            // init 
+            var a = document.getElementById('a');
+            hui.Control.create(a);
+            var a = document.getElementById('b');
+            hui.Control.create(b);
+
+            window.controlMap[1].onchange = function(){
+                document.getElementById('result').innerHTML = this.getValue();
+            };
+
+            // window.controlMap[1].getValue()
+        });
+    </script>
+</body>
+</html>

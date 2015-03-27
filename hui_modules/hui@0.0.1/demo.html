@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui</title>
+<script src="hui.js"></script>
+</head>
+<body>
+    <script type="text/javascript">
+        // hui.define.autoload = true;
+        hui.define('a', ['b', 'c'], function () {
+            alert('a');
+        });
+        hui.define('b', ['c'], function () {
+            alert('b');
+        });
+        hui.define('c', [], function () {
+            alert('c');
+        });
+
+    </script>
+</body>
+</html>

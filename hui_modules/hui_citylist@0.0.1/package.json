@@ -1,0 +1,13 @@
+{
+    "name": "hui_citylist",
+    "version": "0.0.1",
+    "description": "This is \"hui_citylist\".",
+    "main": "hui_citylist.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_control": "*",
+        "hui_util": "*",
+        "hui_dropdown": "*"
+    },
+    "author": "haiyang5210"
+}

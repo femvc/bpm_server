@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_table</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_table.js"></script>
+</head>
+<body>
+<div id="a" ui="type:'Table',formName:'skill_list',fields:'&listTable',datasource:'&listData', sortable:true,size:{width:200}"></div>
+
+    <script type="text/javascript">
+    
+     window.listTable = [{
+        width: 100,
+        title: '技能',
+        sortable: true,
+        field: 'index',
+        content: function (item) {
+            return item['skill'];
+        }
+    }, {
+        width: 40,
+        title: '答对',
+        sortable: true,
+        field: 'correct',
+        content: function (item) {
+            return item['correct'];
+        }
+    }, {
+        width: 40,
+        title: '得分',
+        sortable: true,
+        field: 'score',
+        content: function (item) {
+            return item['score'];
+        }
+    }];
+    window.listData = [{
+        'skill': 'html',
+        'correct': 2,
+        'score': 40
+    }, {
+        'skill': 'css',
+        'correct': 2,
+        'score': 40
+    }];
+ 
+        hui.define.autoload = true;
+        hui.define('', ['hui_table'], function () {
+            // init 
+            hui.Control.create(document.getElementById('a'));
+        });
+    </script>
+</body>
+</html>

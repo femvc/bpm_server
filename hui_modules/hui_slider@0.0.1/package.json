@@ -1,0 +1,13 @@
+{
+    "name": "hui_slider",
+    "version": "0.0.1",
+    "description": "This is \"hui_slider\".",
+    "main": "hui_slider.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_util": "*",
+        "hui_control": "*",
+        "hui_draggable": "*"
+    },
+    "author": "haiyang5210"
+}

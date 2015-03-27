@@ -1,0 +1,12 @@
+{
+    "name": "hui_table",
+    "version": "0.0.1",
+    "description": "This is \"hui_table\".",
+    "main": "hui_table.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_control": "*",
+        "hui_util": "*"
+    },
+    "author": "haiyang5210"
+}

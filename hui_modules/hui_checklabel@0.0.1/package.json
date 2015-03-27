@@ -1,0 +1,13 @@
+{
+    "name": "hui_checklabel",
+    "version": "0.0.1",
+    "description": "This is \"hui_checklabel\".",
+    "main": "hui_checklabel.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_control": "*",
+        "hui_util": "*",
+        "hui_checkbox": "*"
+    },
+    "author": "haiyang5210"
+}

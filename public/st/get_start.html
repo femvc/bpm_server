@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>BPM两步上手 - BpmJS</title>
+    <style>
+    body {font-family: 'microsoft yahei'; line-height: 28px;}
+    h1 { font-size: 30px;}
+    h2,h3,h4 { font-weight: normal;}
+    .code {background-color: #ececec;    border-radius: 5px;    padding: 16px 22px; }
+    </style>
+</head>
+
+<body>
+    <h1>BPM两步上手</h1>
+    <h3>只需两步：</h3>
+    1. &lt;script src=&quot;http://bpmjs.org/api/combo??jquery&quot;&gt;&lt;/script&gt;<br/>
+    2. hui.require([&#39;jquery&#39;], function () { alert($); }<br/>
+
+    <h3>示例代码：（<a href="demo.html">运行代码</a>）</h3>
+    <div class="code">
+        &lt;!DOCTYPE html&gt;
+        <br /> &lt;html lang=&quot;en&quot;&gt;
+        <br /> &lt;head&gt;
+        <br /> &lt;meta charset=&quot;UTF-8&quot;&gt;
+        <br /> &lt;title&gt;Demo - jquery&lt;/title&gt;
+        <br /> &lt;script src=&quot;http://bpmjs.org/api/combo??jquery&quot;&gt;&lt;/script&gt;
+        <br /> &lt;/head&gt;
+        <br /> &lt;body&gt;
+        <br /> &lt;div id=&quot;a&quot;&gt;a&lt;/div&gt;
+        <br />
+        <br /> &lt;script type=&quot;text/javascript&quot;&gt;
+        <br /> &nbsp;&nbsp;&nbsp;&nbsp;hui.require([&#39;jquery&#39;], function () {
+        <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// init
+        <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById(&#39;a&#39;).innerHTML = &#39;jquery ok&#39;;
+        <br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;alert($(&#39;#a&#39;).innerHTML);
+        <br /> &nbsp;&nbsp;&nbsp;&nbsp;});
+        <br /> &lt;/script&gt;
+        <br /> &lt;/body&gt;
+        <br /> &lt;/html&gt;
+
+    </div>
+</body>
+
+</html>

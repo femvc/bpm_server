@@ -1,0 +1,13 @@
+{
+    "name": "hui_birthday",
+    "version": "0.0.1",
+    "description": "This is \"hui_birthday\".",
+    "main": "hui_birthday.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_control": "*",
+        "hui_dropdown": "*",
+        "hui_util": "*"
+    },
+    "author": "haiyang5210"
+}

@@ -1,0 +1,10 @@
+{
+    "name": "widget1",
+    "version": "0.0.1",
+    "description": "This is \"widget1\".",
+    "main": "widget1.js",
+    "dependencies": {
+        "hui": "*"
+    },
+    "author": "haiyang5210"
+}

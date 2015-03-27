@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_requester</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_requester.js"></script>
+</head>
+<body>
+    <div id="a"></div>
+
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_requester'], function () {
+            // init 
+            var a = document.getElementById('a');
+            a.innerHTML = 'hui_requester ok.';
+            
+            // 注: test.json -> [null,[]]
+            Requester.get('package.json', {
+                data: '',
+                onsuccess: function(data){
+                    a.innerHTML += '<br/>get ok. return: ' + data.name;
+                }
+            });
+
+            hui.Mockup.setRule('/hui_helloworld', {
+                status: 0,
+                message: '',
+                data: 'Hello world.'
+            });
+            Requester.get('/hui_helloworld?123', {
+                data: '',
+                onsuccess: function(data){
+                    a.innerHTML += '<br/>mockup ok. return: ' + data.data;
+                }
+            });
+            
+            // 注: 跨域会导致请求出错
+            Requester.get('http://www.femvc.com/other/ajax/jsonp.php', {onsuccess: function(data){
+                // alert(data.success);
+                a.innerHTML += '<br/>get cross domain fail. return: ' + String(data);
+            }});
+
+            // 注: JSONP跨域不会导致出错
+            Requester.JSONP('http://www.femvc.com/other/ajax/jsonp.php', {onsuccess: function(data){ 
+                a.innerHTML += '<br/>jsonp ok. return: ' + data.id;
+            }});
+
+        });
+    </script>
+</body>
+</html>

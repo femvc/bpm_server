@@ -1,0 +1,11 @@
+{
+    "name": "hui_validator",
+    "version": "0.0.1",
+    "description": "This is \"hui_validator\".",
+    "main": "hui_validator.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_util": "*"
+    },
+    "author": "haiyang5210"
+}

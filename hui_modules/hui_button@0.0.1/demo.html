@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_button</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_button.js"></script>
+</head>
+<body>
+    <div ui="type:'Button',id:'a'" id="a">Button</div>
+
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_button'], function () {
+            // init 
+            var btn = hui.Control.create(document.getElementById('a'));
+            btn.onclick = function () {
+                alert(this.type);
+            };
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_mask</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_mask.js"></script>
+</head>
+<body>
+    <div id="a"></div>
+    <button style="position:absolute;z-index:50001;top:8px;left:100px;" onclick="hui.Mask.show();">show</button>
+    <button style="position:absolute;z-index:50001;top:8px;left:150px;" onclick="hui.Mask.hide();">hide</button>
+
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_mask'], function () {
+            // init 
+            document.getElementById('a').innerHTML = 'mask ok.';
+        });
+    </script>
+</body>
+</html>

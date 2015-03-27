@@ -1,0 +1,12 @@
+{
+    "name": "hui_boxpanel",
+    "version": "0.0.1",
+    "description": "This is \"hui_boxpanel\".",
+    "main": "hui_boxpanel.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_util": "*",
+        "hui_control": "*"
+    },
+    "author": "haiyang5210"
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_control</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_control.js"></script>
+</head>
+<body>
+    <div ui="type:'Control'" id="a"></div>
+
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_control'], function () {
+            // init 
+            hui.Control.create(document.getElementById('a'));
+
+            window.controlMap[0].getMain().innerHTML = 'hui_control ok.'
+        });
+    </script>
+</body>
+</html>

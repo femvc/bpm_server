@@ -1,0 +1,42 @@
+{
+  "name": "bpmjs",
+  "version": "0.0.7",
+  "description": "Browser package management",
+  "preferGlobal": "true",
+  "bin": {
+    "bpm": "bin/bpm.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/femvc/bpmjs.git"
+  },
+  "keywords": [
+    "browser",
+    "package",
+    "hujiang",
+    "bpmjs",
+    "bpm"
+  ],
+  "author": {
+    "name": "haiyang5210"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": "*"
+  },
+  "bugs": {
+    "url": "https://github.com/femvc/bpmjs/issues"
+  },
+  "homepage": "https://github.com/femvc/bpmjs",
+  "maintainers": [
+    {
+      "name": "haiyang5210",
+      "email": "haiyang5210@gmail.com"
+    }
+  ],
+  "directories": {},
+  "readme": "Browser javascript package management"
+}

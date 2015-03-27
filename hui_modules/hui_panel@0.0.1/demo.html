@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_panel</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_panel.js"></script>
+</head>
+<body>
+    <div ui="type:'Panel'" id="a"></div>
+
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_panel'], function () {
+            // init 
+            var panel = hui.Control.create(document.getElementById('a'));
+            panel.setInnerHTML('panel ok.');
+        });
+    </script>
+</body>
+</html>

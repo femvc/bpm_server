@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_checklabel</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_checklabel.js"></script>
+</head>
+<body>
+     <label ui="type:'CheckLabel',formName:'label' ,value:'aaaa', label:'aa'" id="a"></label>
+
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_checklabel'], function () {
+            // init 
+            var a = document.getElementById('a');
+            hui.Control.create(a);
+        });
+    </script>
+</body>
+</html>

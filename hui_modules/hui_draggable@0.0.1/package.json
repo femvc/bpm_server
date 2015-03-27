@@ -1,0 +1,11 @@
+{
+    "name": "hui_draggable",
+    "version": "0.0.1",
+    "description": "This is \"hui_draggable\".",
+    "main": "hui_draggable.js",
+    "dependencies": {
+        "hui": "*",
+        "hui_util": "*"
+    },
+    "author": "haiyang5210"
+}

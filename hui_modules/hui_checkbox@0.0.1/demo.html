@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo - hui_checkbox</title>
+<script src="hui_modules\hui\hui.js"></script>
+<script src="hui_checkbox.js"></script>
+</head>
+<body>
+    <div ui="type:'Checkbox'" id="a">dinner</div>
+    <div id="result"></div>
+
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_checkbox'], function () {
+            // init 
+            var a = document.getElementById('a');
+            hui.Control.create(a);
+            window.controlMap[0].onchange = function(){
+                document.getElementById('result').innerHTML = this.getValue();
+            }
+        });
+    </script>
+</body>
+</html>

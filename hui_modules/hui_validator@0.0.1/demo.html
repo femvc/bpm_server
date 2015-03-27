@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Demo - hui_validator</title>
+    <script src="hui_modules\hui\hui.js"></script>
+    <script src="hui_validator.js"></script>
+</head>
+
+<body>
+    <b>Password:</b> 
+    <input id="a" />
+    <button onclick="hui.Validator.applyRule(me, 'password', 'not_show123');">applyRule</button>
+    <button onclick="hui.Validator.showError(me.getMain(), 'Error');">showError(elem, 'Error')</button>
+    <button onclick="hui.Validator.showOK(me);">showOK</button>
+    <button onclick="hui.Validator.showWaiting(me);">showWaiting</button>
+    <button onclick="hui.Validator.cancelNotice(me.getMain());">cancelNotice</button>
+    <script type="text/javascript">
+        hui.define.autoload = true;
+        hui.define('', ['hui_validator'], function() {
+            // init 
+
+            // var rule = Validator.getRule('not_empty');
+            // if (rule && code === 'by_code') {
+            //     errorMsg = rule.noticeText[errorMsg];
+            // }
+            hui.Validator.setRule('password', {
+                'validate': function (text) {
+                    if (text === null || text === undefined || text === '') {
+                        return 1;
+                    }
+                    else if (len < 6) {
+                        return 2;
+                    } 
+                    else {
+                        // weak password
+                        var weak_password = ['000000', '111111', '1111111', '11111111', '112233', '123123', '123321', '123456', '12345678', '654321', '666666', '888888', 'abcdef', 'abcabc', 'abc123', 'a1b2c3', 'aaa111', '123qwe', 'qwerty', 'qweasd', 'admin', 'password', 'p@ssword', 'passwd', 'iloveyou', '5201314', 'password', '123456', '12345678', 'qwerty', 'abc123', 'monkey', '1234567', 'letmein', 'trustno1', 'dragon', 'baseball', '111111', 'iloveyou', 'master', 'sunshine', 'ashley', 'bailey', 'passw0rd', 'shadow', '123123', '654321', 'superman', 'qazwsx', 'michael', 'football'];
+                        for (var i = 0; i < weak_password.length; i++) {
+                            if (text == weak_password[i]) {
+                                return 3;
+                            }
+                        }
+                    }
+
+                    return 0;
+                },
+                'noticeText': {
+                    1: '密码不能为空',
+                    2: '密码至少6位',
+                    3: '请不要使用弱密码'
+                },
+                checkStrong: function(psw) {
+                    var level;
+                    // blank
+                    if (psw === '') {
+                        level = -1;
+                        return level;
+                    }
+                    // normal
+                    level = 0;
+                    psw = psw.replace(/\s/g, '');
+                    if (psw.length <= 5) return level;
+                    var str;
+                    str = psw.replace(/[a-z]/g, '');
+                    if (str !== psw) level++;
+                    psw = str;
+                    str = psw.replace(/[A-Z]/g, '');
+                    if (str !== psw) level++;
+                    psw = str;
+                    str = psw.replace(/[0-9]/g, '');
+                    if (str !== psw) level++;
+                    psw = str;
+                    if (str.length > 0) level++;
+                    psw = str;
+
+                    if (level > 3) {
+                        level = 3;
+                    }
+
+                    return level;
+                }
+            }, 'force');
+        });
+
+
+        var me = {
+            getValue: function() {
+                return hui.g('a').value
+            },
+            getMain: function() {
+                return hui.g('a');
+            }
+        };
+    </script>
+</body>
+
+</html>
