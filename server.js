@@ -24,34 +24,6 @@ var cleanCSS = new require('clean-css')({
 
 var exec = require('child_process').exec;
 
-function listDir(loc) {
-    fs.readdir(loc, function (error, files) {
-        for (var i in files) {
-            var val = path.join(loc, files[i]);
-            var stat = fs.statSync(val);
-            if (stat.isDirectory(val)) {
-                if (files[i] !== 'hui_modules') {
-                    listDir(val);
-                }
-            }
-            else {
-                var list = val.split('.');
-                var ext = list.pop();
-                if (ext === 'js' || ext === 'css') {
-                    var min = list.join('.') + '.min.' + ext;
-                    if ((!fs.existsSync(min) || args[0] === '-f') && list[list.length - 1] !== 'min') {
-                        var data = fs.readFileSync(val, 'utf8');
-                        var str = ext === 'css' ? cleanCSS.minify(data) : uglify.minify(data, {
-                            fromString: true
-                        }).code;
-                        fs.writeFileSync(min, str, 'utf8');
-                    }
-                }
-            }
-        }
-    });
-}
-
 http.createServer(function (req, res) {
     var url = String(req.url);
     var msg, str = url,
@@ -245,7 +217,6 @@ http.createServer(function (req, res) {
                                         fs.unlink(filePath);
 
                                         var pwd = path.resolve(__dirname + '/hui_modules/' + mod_name);
-                                        listDir(pwd);
 
                                         console.log('publish success.');
                                         res.end('publish success.');
@@ -268,9 +239,6 @@ http.createServer(function (req, res) {
     }
     else if ((url + '?').indexOf('/api/js?') === 0) {
         concat.js(req, res);
-    }
-    else if ((url + '?').indexOf('/api/css?') === 0) {
-        concat.css(req, res);
     }
     else if ((url + '??').indexOf('/api/combo??') === 0) {
         concat.getDep(req, function (result) {

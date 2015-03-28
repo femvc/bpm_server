@@ -193,10 +193,6 @@ exports.js = function (req, res) {
     writeContent(req, res, 'js');
 };
 
-exports.css = function (req, res) {
-    writeContent(req, res, 'css');
-};
-
 
 function getDep(req, cb) {
     
