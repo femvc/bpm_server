@@ -124,6 +124,36 @@ var util = {
             result = result && parseInt('0' + m[i], 10) >= parseInt('0' + n[i], 10);
         }
         return a === '*' || a === '' ? true : (b === '*' || b === '' ? false : result);
+    },
+    sortBy: function (list, field, order) {
+        if (list && list.sort && list.length) {
+            list.sort(function (a, b) {
+                var m, n;
+                m = String(a[field]).toLowerCase();
+                n = String(b[field]).toLowerCase();
+
+                if (String(parseInt('0' + m, 10)) == m && String(parseInt('0' + n, 10)) == n) {
+                    m = parseInt(m, 10);
+                    n = parseInt(n, 10);
+                }
+                else {
+                    if (m > n) {
+                        m = 1;
+                        n = -m;
+                    }
+                    else if (m < n) {
+                        m = -1;
+                        n = -m;
+                    }
+                    else {
+                        m = 1;
+                        n = m;
+                    }
+                }
+                return (order == 'desc' ? n - m : m - n);
+            });
+        }
+        return list;
     }
 };
 
