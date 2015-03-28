@@ -14,7 +14,7 @@
  * @author wanghaiyang
  * @date 2014/05/05
  */
-hui.define('hui_template', ['hui'], function () {
+hui.define('hui_template', [], function () {
     hui.Template = {
         /**
          * @name 解析前 originTargetContainer, 解析后 parsedTargetContainer

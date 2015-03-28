@@ -40,8 +40,8 @@ var setHeader = function (res) {
 //获取生成文件名和绝对路径
 var getFileName = function (name) {
     var filename = crypto.createHash('md5').update(name).digest('hex');
-    var tide = parseInt(filename, 36) % 1000;
-    return path.normalize('/tide/' + tide + '/' + filename);
+    // var tide = parseInt(filename, 36) % 1000;
+    return path.normalize('/tide/' + filename);
 };
 //获取文件夹路径
 var getFolderPath = function (filePath) {

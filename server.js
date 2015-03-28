@@ -62,6 +62,10 @@ http.createServer(function (req, res) {
         str = url.split('??')[1];
         req.query.file = str.split('?')[0];
     }
+    // 默认自动排序，可设置order指定不自动排序
+    if (!req.query.order && req.query.file) {
+        req.query.file = String(req.query.file).split(',').sort().join(',');
+    }
 
     list = str.split('?');
     list.shift();
