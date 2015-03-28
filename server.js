@@ -183,7 +183,7 @@ http.createServer(function (req, res) {
         var mod_name;
 
         var form = new formidable.IncomingForm();
-        form.uploadDir = path.resolve(__dirname + '/dir');
+        form.uploadDir = path.resolve(__dirname + '/upload_tmp');
         form.parse(req, function (err, fields, files) {
             try {
                 pkgjson = JSON.parse(fields.package_json);
