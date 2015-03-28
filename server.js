@@ -62,10 +62,7 @@ http.createServer(function (req, res) {
         str = url.split('??')[1];
         req.query.file = str.split('?')[0];
     }
-    // 默认自动排序，可设置order指定不自动排序
-    if (!req.query.order && req.query.file) {
-        req.query.file = String(req.query.file).split(',').sort().join(',');
-    }
+    req.query.file = req.query.file || '';
 
     list = str.split('?');
     list.shift();
@@ -135,7 +132,7 @@ http.createServer(function (req, res) {
         }
     }
     else if ((url + '?').indexOf('/api/dep??') === 0 || (url + '?').indexOf('/api/get_dep??') === 0) {
-        concat.getDep(req.query.file, function (result) {
+        concat.getDep(req, function (result) {
             var html = JSON.stringify(result);
             res.writeHead(200, {
                 'content-type': 'text/html'
@@ -269,24 +266,6 @@ http.createServer(function (req, res) {
         });
         return;
     }
-    else if ((url + '??').indexOf('/api/hui_modules??') === 0) {
-        concat.getDep(req.query.file, function (result) {
-            var i = req.query.file.split('@')[0];
-            if (result[i]) {
-                // req.url = '/api/js/??' + result[m].name + '@' + result[m].version + '/' + result[m].main;
-                // concat.js(req, res);
-                var toUrl = '//bpmjs.org/js/??' + result[i].name + '@' + result[i].version + '/' +
-                    (req.query.debug ? result[i].main : result[i].main.substr(0, result[i].main.length - 2) + 'min.js');
-                res.writeHead(301, {
-                    'Location': toUrl
-                });
-                res.end();
-            }
-            else {
-                res.end('//Not exist.');
-            }
-        });
-    }
     else if ((url + '?').indexOf('/api/index?') === 0) {
         concat.index(req, res);
     }
@@ -297,31 +276,91 @@ http.createServer(function (req, res) {
         concat.css(req, res);
     }
     else if ((url + '??').indexOf('/api/combo??') === 0) {
-        concat.getDep(req.query.file, function (result) {
+        concat.getDep(req, function (result) {
+            console.log('>>>>>>>>>>result>>>>>>>>>>>>');
+            console.log(result);
+            // {
+            //     hui_util: {
+            //         name: 'hui_util',
+            //         version: '0.0.1',
+            //         description: 'This is "hui_util".',
+            //         main: 'hui_util.js',
+            //         dependencies: {
+            //             hui: '*'
+            //         },
+            //         author: 'haiyang5210'
+            //     },
+            //     hui: {
+            //         name: 'hui',
+            //         version: '0.0.1',
+            //         description: 'This is "hui".',
+            //         main: 'hui.js',
+            //         author: 'haiyang5210'
+            //     },
+            //     hui_template: {
+            //         name: 'hui_template',
+            //         version: '0.0.1',
+            //         description: 'This is "hui_template".',
+            //         main: 'hui_template.js',
+            //         author: 'haiyang5210'
+            //     }
+            // }
+
             var str = [],
-                not = (req.query.n || '').split(','),
-                mod,
-                mod_name;
+                // n=hui@0.0.1,hui_util@0.0.1 => not=['hui', 'hui_util']
+                not = (req.query.n || '').replace(/@[^\,]*,/g, ',').replace(/^,+|,+$/g, '').split(','),
+                mod_main,
+                mod_name,
+                mod_old,
+                mod_result = [],
+                dx;
+            mod_old = req.query.file.replace(/@[^\,]*,/g, ',').replace(/^,+|,+$/g, '').split(',');
             for (var i in result) {
-                if (result[i]) {
-                    mod = result[i].name + '@' + result[i].version + '/' + result[i].main;
-                    mod_name = String(result[i].name).split('@')[0];
-                    if (not.indexOf(mod_name) === -1) {
-                        if (mod_name !== 'hui') {
-                            str.push(mod);
-                        }
-                        else {
-                            str.unshift(mod);
-                        }
-                    }
+                if (result[i] !== undefined) {
+                    mod_result.push(result[i]);
                 }
-                else if (result[i] === undefined) {
+                else {
                     // Todo: mod not exist!
                 }
             }
-            var param = (url + '???').split('??')[1].split('?').pop();
+            mod_result = hui.util.sortBy(mod_result, 'name');
+            // sort deps, but keep src order
+            if (req.query.order) {
+                for (var i=0,len=mod_result.length; i<len; i++) {
+                    dx = mod_old.indexOf(mod_result[i].name);
+                    if (dx > -1) {
+                        mod_result[len + dx] = mod_result[i];
+                        mod_result[i] = null;
+                    }
+                }
+            }
+            // mod hui
+            for (var i=0,len=mod_result.length; i<len; i++) {
+                if (String(mod_result[i].name).split('@')[0] === 'hui') {
+                    dx = mod_result[i];
+                    mod_result[i] = null;
+                    mod_result.unshift(dx);
+                    break;
+                }
+            }
+            
+            // to mod main
+            for (var i in mod_result) {
+                if (mod_result[i]) {
+                    mod_main = mod_result[i].name + '@' + mod_result[i].version + '/' + mod_result[i].main;
+                    mod_name = String(mod_result[i].name).split('@')[0];
+                    if (not.indexOf(mod_name) === -1) {
+                        str.push(mod_main);
+                    }
+                }
+            }
+            // combo
             if (str.length) {
-                req.query.file = (str.length ? 'hui_modules/' : '') + str.join(',hui_modules/');
+                for (var i=0,len=str.length; i<len; i++) {
+                    str[i] = 'hui_modules/' + str[i];
+                }
+                // old req.query.file is default order
+                req.query.filelist = str; //'hui_modules/' + str.join(',hui_modules/');
                 concat.js(req, res);
             }
             else {

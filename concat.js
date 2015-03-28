@@ -54,7 +54,7 @@ var getFilePath = function (filename) {
     return url;
 };
 //按照url获取文件内容
-var getFile = function (url, callback) {
+var getFile = function (index, url, callback) {
     var resultdata = '';
     // url = url.replace(/\.\.\//g, '').replace(/\.\//g, '').split('|');
     url = url.split('|');
@@ -69,25 +69,23 @@ var getFile = function (url, callback) {
                     resultdata = bfHelper.toBuffer();
                     resultdata = iconv.decode(resultdata, (url[1] || 'UTF8').toUpperCase());
                     resultdata = iconv.encode(resultdata, 'UTF8');
-                    callback('/*path --' + url[0] + '*/\r\n' + resultdata, true);
+                    callback(index, '/*path --' + url[0] + '*/\r\n' + resultdata, true);
                 });
             }
             else {
-                callback('/*Read Error(http) --' + url[0] + '*/\r\n', false);
+                callback(index, '/*Read Error(http) --' + url[0] + '*/\r\n', false);
             }
         });
     }
     else {
         var src = getFilePath(url[0]);
         resultdata = fs.readFile(src, function (err, data) {
-            console.log(err);
             if (!err) {
-                console.log(data);
                 resultdata = iconv.encode(data, 'UTF8');
-                callback('/*path --' + src + '*/\r\n' + resultdata, true);
+                callback(index, '/*path --' + src + '*/\r\n' + resultdata, true);
             }
             else {
-                callback('/*Read Error(file) --' + src + '*/\r\n', false);
+                callback(index, '/*Read Error(file) --' + src + '*/\r\n', false);
             }
         });
 
@@ -95,23 +93,23 @@ var getFile = function (url, callback) {
 };
 //合并文件
 var mergeFile = function (query, type, callback) {
-    var fsArray = query.file.split(',');
+    var fsArray = query.filelist;
     var files = [],
         num = 0;
-    var cb = function (text) {
+    var cb = function (index, text) {
         num++;
-        files = files.concat([text]);
+        files[index] = text;
         if (num === fsArray.length) {
             callback(String(query.debug) !== 'undefined' ? files.join('\n') :
                 (type == 'js' ? minify(files.join('')).code :
                     minicss(files.join(''))));
         }
     };
-    for (var file in fsArray) {
-        if (query.host && fsArray[file].indexOf('http') !== 0) {
-            fsArray[file] = query.host + fsArray[file];
+    for (var i=0,len=fsArray.length; i<len; i++) {
+        if (query.host && fsArray[i].indexOf('http') !== 0) {
+            fsArray[i] = query.host + fsArray[i];
         }
-        getFile(fsArray[file], cb);
+        getFile(i, fsArray[i], cb);
     }
 };
 
@@ -119,66 +117,65 @@ var mergeFile = function (query, type, callback) {
 var writeContent = function (req, res, type) {
     res.setHeader('Charset', 'utf-8');
     res.setHeader('Content-Type', (type === 'js' ? 'application/javascript;charset=UTF-8' : type === 'css' ? 'text/css;charset=UTF-8' : 'text/plain;charset=UTF-8'));
-    if (!req.query || !req.query.file) {
+    if (!req.query || !req.query.filelist || !req.query.filelist.length) {
         res.end('concat abort');
-        console.log(req.query);
         return;
     }
-    if (req.query) {
-        if (req.query.file && req.query.file != '') {
-            if (String(req.query.debug) !== 'undefined') {
-                mergeFile(req.query, type, function (code) {
-                    res.end(code);
-                })
-            }
-            else {
-                var filename = getFileName(req.query.file) + '.' + type;
-                var filepath = getFilePath(filename);
-                fs.exists(filepath, function (exists) {
-                    if (!exists) {
-                        mergeFile(req.query, type, function (code) {
-                            code = '/*' + filepath + '*/' + code;
-                            var folderPath = getFolderPath(filepath);
-                            fs.exists(folderPath, function (flag) {
-                                function writeFile() {
-                                    fs.writeFile(filepath, code, 'utf8', function (err) {
-                                        setHeader(res);
-                                        res.setHeader('nodetype', 'write');
-                                        res.end(code);
-                                    })
-                                }
-                                if (!flag) {
-                                    fs.mkdir(folderPath, function () {
-                                        writeFile()
-                                    })
-                                }
-                                else {
+    if (req.query && req.query.filelist && req.query.filelist.length) {
+        // 注：直接输出，不生成缓存文件
+        if (req.query.debug && String(req.query.debug) !== 'undefined') {
+            mergeFile(req.query, type, function (code) {
+                res.end(code);
+            });
+        }
+        // 注：生成缓存文件再输出
+        else {
+            var filename = getFileName(req.query.file) + '.' + type;
+            var filepath = getFilePath(filename);
+            fs.exists(filepath, function (exists) {
+                if (!exists) {
+                    mergeFile(req.query, type, function (code) {
+                        code = '/**<' + filepath + '>**/' + code;
+                        var folderPath = getFolderPath(filepath);
+                        fs.exists(folderPath, function (flag) {
+                            function writeFile() {
+                                fs.writeFile(filepath, code, 'utf8', function (err) {
+                                    setHeader(res);
+                                    res.setHeader('nodetype', 'write');
+                                    res.end(code);
+                                });
+                            }
+                            if (!flag) {
+                                fs.mkdir(folderPath, function () {
                                     writeFile();
-                                }
+                                });
+                            }
+                            else {
+                                writeFile();
+                            }
 
-                            });
-                        })
+                        });
+                    });
+                }
+                else {
+                    if (req.headers['if-modified-since'] && (new Date().valueOf() - new Date(req.headers['if-modified-since']).valueOf()) < 30 * 60 * 60 * 24) {
+                        //exports.removeContentHeaders(res);
+                        res.setHeader('nodetype', '');
+                        res.statusCode = 304;
+                        res.end();
                     }
                     else {
-                        if (req.headers['if-modified-since'] && (new Date().valueOf() - new Date(req.headers['if-modified-since']).valueOf()) < 30 * 60 * 60 * 24) {
-                            //exports.removeContentHeaders(res);
-                            res.setHeader('nodetype', '');
-                            res.statusCode = 304;
-                            res.end();
-                        }
-                        else {
-                            setHeader(res)
-                            res.setHeader('nodetype', 'read');
-                            fs.readFile(filepath, 'utf8', function (err, data) {
-                                res.end(data);
-                            })
+                        setHeader(res);
+                        res.setHeader('nodetype', 'read');
+                        fs.readFile(filepath, 'utf8', function (err, data) {
+                            res.end(data);
+                        });
 
-                        }
                     }
-                })
-            }
-
+                }
+            });
         }
+
     }
 };
 
@@ -195,14 +192,15 @@ exports.css = function (req, res) {
 };
 
 
-function getDep(str, cb) {
+function getDep(req, cb) {
+    
     fs.readFile(path.resolve(__dirname + '/packlist.txt'), function (err, data) {
         if (err) throw err;
         var jsonObj = JSON.parse(data + '}');
 
         //todo
         var list = [];
-        str = str || '';
+        var str = req.query.file || '';
         // {"hui": "*", "hui_control": "*"}
 
         if (str && str.indexOf('{') === 0) {
@@ -229,23 +227,23 @@ function getDep(str, cb) {
 
         while (list.length) {
             var mod = list.pop();
-            var result = [];
-            var name = mod.split('@')[0];
-            var version = (mod + '@*').split('@')[1];
-            var m = version === '' || version === '*' ? lastVersion[name] : jsonObj[mod];
+            if (mod) {
+                var result = [];
+                var name = mod.split('@')[0];
+                var version = (mod + '@*').split('@')[1];
+                var m = version === '' || version === '*' ? lastVersion[name] : jsonObj[mod];
 
-            all_dep[name] = m;
+                all_dep[name] = m;
 
-            if (m && m.dependencies) {
-                for (var i in m.dependencies) {
-                    if (!all_dep[i]) {
-                        result.push(i + '@' + m.dependencies[i]);
+                if (m && m.dependencies) {
+                    for (var i in m.dependencies) {
+                        if (!all_dep[i]) {
+                            result.push(i + '@' + m.dependencies[i]);
+                        }
                     }
+                    list = list.concat(result);
                 }
-                list = list.concat(result);
             }
-
-            
         }
 
         if (!all_dep['hui']) {
