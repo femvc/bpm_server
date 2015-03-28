@@ -216,13 +216,10 @@ http.createServer(function (req, res) {
                     fs.appendFile(path.resolve(__dirname + '/packlist.txt'), '\r\n,"' + mod_name + '": ' + JSON.stringify(pkgjson), function (err) {
                         if (err) throw err;
                         msg = '';
-                        console.log(msg);
                         res.write(msg);
                     });
 
                     if (files && files.tarball) {
-                        console.log('================');
-                        console.log(files.tarball.path);
                         fstream
                             .Reader({
                                 'path': path.resolve(files.tarball.path)
@@ -277,35 +274,6 @@ http.createServer(function (req, res) {
     }
     else if ((url + '??').indexOf('/api/combo??') === 0) {
         concat.getDep(req, function (result) {
-            console.log('>>>>>>>>>>result>>>>>>>>>>>>');
-            console.log(result);
-            // {
-            //     hui_util: {
-            //         name: 'hui_util',
-            //         version: '0.0.1',
-            //         description: 'This is "hui_util".',
-            //         main: 'hui_util.js',
-            //         dependencies: {
-            //             hui: '*'
-            //         },
-            //         author: 'haiyang5210'
-            //     },
-            //     hui: {
-            //         name: 'hui',
-            //         version: '0.0.1',
-            //         description: 'This is "hui".',
-            //         main: 'hui.js',
-            //         author: 'haiyang5210'
-            //     },
-            //     hui_template: {
-            //         name: 'hui_template',
-            //         version: '0.0.1',
-            //         description: 'This is "hui_template".',
-            //         main: 'hui_template.js',
-            //         author: 'haiyang5210'
-            //     }
-            // }
-
             var str = [],
                 // n=hui@0.0.1,hui_util@0.0.1 => not=['hui', 'hui_util']
                 not = (req.query.n || '').replace(/@[^\,]*,/g, ',').replace(/^,+|,+$/g, '').split(','),
@@ -314,7 +282,7 @@ http.createServer(function (req, res) {
                 mod_old,
                 mod_result = [],
                 dx;
-            mod_old = req.query.file.replace(/@[^\,]*,/g, ',').replace(/^,+|,+$/g, '').split(',');
+            mod_old = req.query.file.replace(/@[^\,]*,/g, ',').replace(/@[^\,]*$/g, '').replace(/^,+|,+$/g, '').split(',');
             for (var i in result) {
                 if (result[i] !== undefined) {
                     mod_result.push(result[i]);
@@ -323,7 +291,7 @@ http.createServer(function (req, res) {
                     // Todo: mod not exist!
                 }
             }
-            mod_result = hui.util.sortBy(mod_result, 'name');
+            mod_result = bpm.util.sortBy(mod_result, 'name');
             // sort deps, but keep src order
             if (req.query.order) {
                 for (var i=0,len=mod_result.length; i<len; i++) {
@@ -345,7 +313,7 @@ http.createServer(function (req, res) {
             }
             
             // to mod main
-            for (var i in mod_result) {
+            for (var i=0,len=mod_result.length; i<len; i++) {
                 if (mod_result[i]) {
                     mod_main = mod_result[i].name + '@' + mod_result[i].version + '/' + mod_result[i].main;
                     mod_name = String(mod_result[i].name).split('@')[0];
@@ -354,6 +322,7 @@ http.createServer(function (req, res) {
                     }
                 }
             }
+
             // combo
             if (str.length) {
                 for (var i=0,len=str.length; i<len; i++) {
