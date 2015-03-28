@@ -40,9 +40,10 @@ var setHeader = function (res) {
 //获取生成文件名和绝对路径
 var getFileName = function (req) {
     var file = req.query.file;
-    var name = ''
-        + (req.query.order ? file : file.split(',').sort().join(','))
-        + (req.query.n ? '_n_' + req.query.n.replace(/[^@0-9a-zA-Z\_\-\.\,]/ig, '') : '');
+    var name = [
+        (req.query.order ? file : file.split(',').sort().join(',')),
+        (req.query.n ? '_n_' + req.query.n.replace(/[^@0-9a-zA-Z\_\-\.\,]/ig, '') : '')
+        ].join('');
     var filename = String(name).length < 200 ? name : crypto.createHash('md5').update(name).digest('hex');
     // var tide = parseInt(filename, 36) % 1000;
     return path.normalize('/tide/' + filename);
