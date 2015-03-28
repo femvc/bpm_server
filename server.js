@@ -62,7 +62,7 @@ http.createServer(function (req, res) {
         str = url.split('??')[1];
         req.query.file = str.split('?')[0];
     }
-    req.query.file = req.query.file || '';
+    req.query.file = (req.query.file || '').replace(/[^@0-9a-zA-Z\_\-\.\,]/ig, '').replace(/\,\,+/g, ',').replace(/(^,|,$)/g, '');
 
     list = str.split('?');
     list.shift();

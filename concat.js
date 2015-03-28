@@ -38,8 +38,12 @@ var setHeader = function (res) {
     if (!res.getHeader('Last-Modified')) res.setHeader('Last-Modified', date.toUTCString());
 };
 //获取生成文件名和绝对路径
-var getFileName = function (name) {
-    var filename = crypto.createHash('md5').update(name).digest('hex');
+var getFileName = function (req) {
+    var file = req.query.file;
+    var name = ''
+        + (req.query.order ? file : file.split(',').sort().join(','))
+        + (req.query.n ? '_n_' + req.query.n.replace(/[^@0-9a-zA-Z\_\-\.\,]/ig, '') : '');
+    var filename = String(name).length < 200 ? name : crypto.createHash('md5').update(name).digest('hex');
     // var tide = parseInt(filename, 36) % 1000;
     return path.normalize('/tide/' + filename);
 };
@@ -50,7 +54,6 @@ var getFolderPath = function (filePath) {
 //获取文件路径
 var getFilePath = function (filename) {
     var url = path.normalize(path.join(__dirname.replace('routes', ''), filename)); // __dirname || process.cwd()
-    console.log(url);
     return url;
 };
 //按照url获取文件内容
@@ -92,7 +95,7 @@ var getFile = function (index, url, callback) {
     }
 };
 //合并文件
-var mergeFile = function (query, type, callback) {
+var mergeFile = function (query, callback) {
     var fsArray = query.filelist;
     var files = [],
         num = 0;
@@ -100,9 +103,7 @@ var mergeFile = function (query, type, callback) {
         num++;
         files[index] = text;
         if (num === fsArray.length) {
-            callback(String(query.debug) !== 'undefined' ? files.join('\n') :
-                (type == 'js' ? minify(files.join('')).code :
-                    minicss(files.join(''))));
+            callback(files);
         }
     };
     for (var i=0,len=fsArray.length; i<len; i++) {
@@ -124,18 +125,22 @@ var writeContent = function (req, res, type) {
     if (req.query && req.query.filelist && req.query.filelist.length) {
         // 注：直接输出，不生成缓存文件
         if (req.query.debug && String(req.query.debug) !== 'undefined') {
-            mergeFile(req.query, type, function (code) {
+            mergeFile(req.query, function (files) {
+                var code = files.join('\n');
                 res.end(code);
             });
         }
         // 注：生成缓存文件再输出
         else {
-            var filename = getFileName(req.query.file) + '.' + type;
+            var filename = getFileName(req) + '.' + type;
             var filepath = getFilePath(filename);
             fs.exists(filepath, function (exists) {
                 if (!exists) {
-                    mergeFile(req.query, type, function (code) {
-                        code = '/**<' + filepath + '>**/' + code;
+                    mergeFile(req.query, function (files) {
+
+                        var code = '/**<' + filepath + '>**/' + 
+                            (type == 'js' ? minify(files.join('')).code : minicss(files.join('')));
+
                         var folderPath = getFolderPath(filepath);
                         fs.exists(folderPath, function (flag) {
                             function writeFile() {
