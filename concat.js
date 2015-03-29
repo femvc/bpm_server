@@ -46,7 +46,7 @@ var getFileName = function (req) {
         ].join('');
     var filename = String(name).length < 200 ? name : crypto.createHash('md5').update(name).digest('hex');
     // var tide = parseInt(filename, 36) % 1000;
-    return path.normalize('/tide/' + filename);
+    return {fullname: name, filename: path.normalize('/tide/' + filename)};
 };
 //获取文件夹路径
 var getFolderPath = function (filePath) {
@@ -133,13 +133,13 @@ var writeContent = function (req, res, type) {
         }
         // 注：生成缓存文件再输出
         else {
-            var filename = getFileName(req) + '.' + type;
-            var filepath = getFilePath(filename);
+            var filename = getFileName(req);
+            var filepath = getFilePath(filename.filename + '.' + type);
             fs.exists(filepath, function (exists) {
                 if (!exists) {
                     mergeFile(req.query, function (files) {
 
-                        var code = '/**<' + filepath + '>**/' + 
+                        var code = '/**<' + filename.fullname + '|' + filepath + '>**/' + 
                             (type == 'js' ? minify(files.join('')).code : minicss(files.join('')));
 
                         var folderPath = getFolderPath(filepath);
